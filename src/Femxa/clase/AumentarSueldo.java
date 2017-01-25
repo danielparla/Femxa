@@ -10,16 +10,19 @@ public class AumentarSueldo {
 	public static void mostrarLista(ArrayList<Empleado> lemp) {
 
 		for (Empleado emp : lemp) {
-			System.out.println("El empleado " +emp.getNombre() + " pertenece al departamento de " +emp.getDpto()+" pasará de cobrar "+ (emp.getSalario()*1.2));
+			System.out.println("El empleado " +emp.getNombre() + " pertenece al departamento de " +emp.getDpto()+" pasará a cobrar "+ (emp.getSalario()*1.2));
 
 		}
 	}
 
 	public static <dpto> void main(String[] args) throws Exception {
 
+		String consulta1=InstruccionesSQL.CONSULTA_EMPLEADOS_SALARIO;
+		String update= InstruccionesSQL.ACTUALIZAR_EMPLEADOS_SALARIO;
 		Connection conn = null;
 		ResultSet rset = null;
 		Statement stmt = null;
+		boolean rset_update=false;
 		
 		ArrayList<Empleado> lista_empleados;
 
@@ -29,10 +32,11 @@ public class AumentarSueldo {
 			
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			
-			conn = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe", "HR", "password");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "HR", "password");
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
-			rset = stmt.executeQuery("SELECT E.FIRST_NAME, E.EMPLOYEE_ID, E.SALARY, E.DEPARTMENT_ID, D.DEPARTMENT_NAME, D.DEPARTMENT_ID FROM DEPARTMENTS D, EMPLOYEES E WHERE E.DEPARTMENT_ID = D.DEPARTMENT_ID AND D.DEPARTMENT_ID=10");
+			rset = stmt.executeQuery(consulta1);
+			
 			String nombre = null;
 			int ID =0;
 			int salario = 0;
@@ -40,25 +44,24 @@ public class AumentarSueldo {
 			String nom_dpto = null;
 			Empleado empleado = new Empleado(ID, nombre, salario, dpto, nom_dpto);
 			lista_empleados.add(empleado);
-			ResultSet rset2=null;
 			
-			while (rset.next()) {
+			while (rset.next()){
 				nombre = rset.getString("FIRST_NAME");
 				ID = rset.getInt("EMPLOYEE_ID");
-				
 				dpto = rset.getInt("DEPARTMENT_ID");
 				nom_dpto = rset.getString("DEPARTMENT_NAME");
 				salario = rset.getInt("SALARY");
 				empleado = new Empleado(ID, nombre, salario, dpto, nom_dpto);
-				rset2= stmt.executeQuery("UPDATE EMPLOYEES SET SALARY = SALARY*1.2 where EMPLOYEES.DEPARTMENT_ID=10");
-				conn.commit();
 				lista_empleados.add(empleado);
+				conn.commit();
+				rset_update=stmt.execute(update);
 			}
 			
 			mostrarLista(lista_empleados);
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			conn.rollback();
 		} 
 		finally 
 		{
