@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import Femxa.clase.Empleado;
+import BBDD.Empleado;
 
 public class yo {
 

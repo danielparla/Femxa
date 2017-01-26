@@ -1,4 +1,4 @@
-package Femxa.clase;
+package BBDD;
 
 public class Sueldos {
 

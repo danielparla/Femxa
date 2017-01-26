@@ -1,4 +1,4 @@
-package Femxa.clase;
+package BBDD;
 
 public class InstruccionesSQL {
 
@@ -16,4 +16,6 @@ public class InstruccionesSQL {
 	= "UPDATE EMPLOYEES SET SALARY = SALARY*1.2 where "
 	+ "EMPLOYEES.DEPARTMENT_ID=10";
 
+	public static final String CONSULTA_EMPLEADOS_DPTO
+	= "SELECT * FROM EMPLOYEES WHERE EMPLOYEES.DEPARTMENT_ID=10";
 }

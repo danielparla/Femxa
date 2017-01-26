@@ -2,7 +2,7 @@ package RegistroPrograma;
 import java.io.IOException;
 import java.util.Scanner;
 
-import Femxa.clase.Usuario;
+import BBDD.Usuario;
 
 public class Inicio {
 

@@ -1,4 +1,4 @@
-package Femxa.clase;
+package BBDD;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
